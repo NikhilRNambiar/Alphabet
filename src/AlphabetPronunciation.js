@@ -1,22 +1,22 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 const AlphabetPronunciation = () => {
   const alphabets = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+  const [voices, setVoices] = useState([]);
 
-//   const speak = (letter) => {
-//     const utterance = new SpeechSynthesisUtterance(letter);
-//     speechSynthesis.speak(utterance);
-//   };
-const speak = (letter) => {
+  useEffect(() => {
+    const loadVoices = () => {
+      setVoices(speechSynthesis.getVoices());
+    };
+    speechSynthesis.onvoiceschanged = loadVoices;
+    loadVoices();
+  }, []);
+
+  const speak = (letter) => {
     const utterance = new SpeechSynthesisUtterance(letter);
-    const voices = speechSynthesis.getVoices();
-    
-    // Change voice (e.g., selecting a female voice or a different language)
     utterance.voice = voices.find(voice => voice.name.includes("Google US English")) || voices[0];
-  
     speechSynthesis.speak(utterance);
   };
-  
 
   return (
     <div className="flex flex-wrap gap-6 p-6 justify-center min-h-screen bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500 animate-gradient text-center">
